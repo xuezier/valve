@@ -1,0 +1,43 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "reactNamespace": "Ergate",
+        "declaration": true,
+        "target": "es2017",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "strict": true,
+        "noImplicitAny": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowJs": false,
+        "pretty": true,
+        "noEmitOnError": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "strictPropertyInitialization": false,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "inlineSourceMap": true,
+        "useUnknownInCatchVariables": false,
+        "outDir": "dist"
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "test",
+        "coverage",
+        "release.ts",
+        "lib/",
+        "example",
+        "package",
+        "app/public",
+        "app/views",
+        "node_modules*"
+    ]
+}
