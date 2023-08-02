@@ -1,0 +1,1 @@
+export type ERateLimitingContriller = 'enabled' | 'disabled' | 'triggered';
