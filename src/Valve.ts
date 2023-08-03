@@ -14,7 +14,7 @@ export class Valve extends Trigger<EValve> {
         return this._counter;
     }
 
-    private _rateLimitingController = new RateLimitingController();
+    private _rateLimitingController = new RateLimitingController(this);
     get rateLimitingController() {
         return this._rateLimitingController;
     }

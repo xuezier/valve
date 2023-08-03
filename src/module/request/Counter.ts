@@ -74,6 +74,8 @@ export class RequestCounter extends Module {
 
         // 计数器加1
         this.count++;
+
+        return this.count;
     }
 
     // reset方法用于重置计数器
