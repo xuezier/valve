@@ -1,3 +1,4 @@
+import { APILayer } from "../../core/server/APILayer";
 import { ECounter } from "../../core/trigger/event/ECounter";
 import { Trigger } from "../../core/trigger/function/Trigger";
 import { Module } from "../base/Module";
@@ -51,6 +52,12 @@ export class RequestCounter extends Module {
         return this._trigger;
     }
 
+    // 存储API请求计数器的Map，键为APILayer对象，值为对应的RequestCounter实例
+    private _APICounter: Map<APILayer, RequestCounter> = new Map();
+    get APICounter() {
+        return this._APICounter;
+    }
+
     // 构造函数，接受一个可选的时间窗口参数，单位为秒
     constructor(interval?: number) {
         super();
@@ -60,10 +67,13 @@ export class RequestCounter extends Module {
             this.interval = interval * 1000;
 
         // 注册触发器的'reset'事件，当触发该事件时执行reset方法
-        this.trigger.once('reset', () => this.reset());
+        this.trigger.on('reset', () => this.reset());
     }
 
-    // addRequest方法用于增加请求计数
+    /**
+     * 增加请求计数
+     * @returns 返回增加后的请求计数值
+     */
     addRequest() {
         // 获取当前时间戳
         const now = Date.now();
@@ -78,7 +88,22 @@ export class RequestCounter extends Module {
         return this.count;
     }
 
-    // reset方法用于重置计数器
+    /**
+     * 增加指定API的请求计数
+     * @param api - APILayer对象
+     * @returns 返回增加后的请求计数值
+     */
+    addAPIRequest(api: APILayer) {
+        if(!this.APICounter.has(api))
+            this.APICounter.set(api, new RequestCounter(this.interval));
+
+        return (<RequestCounter>this.APICounter.get(api)).addRequest();
+    }
+
+    /**
+     * 重置计数器
+     * @param now - 可选参数，指定重置的时间戳，如果不传则使用当前时间戳
+     */
     reset(now?: number) {
         // 将计数器重置为0，并更新上次计数重置的时间戳
         this.count = 0;
