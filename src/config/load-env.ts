@@ -7,3 +7,12 @@ export function loadEnv<T>(key: EnviromentConfigKey, defaultValue: T) {
 
     return defaultValue;
 }
+
+export function loadNumber(key: EnviromentConfigKey, defaultValue: number) {
+    const value = loadEnv(key, defaultValue);
+
+    if(value && typeof value !== 'number')
+        return +value;
+
+    return value;
+}

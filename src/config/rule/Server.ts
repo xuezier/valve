@@ -1,10 +1,10 @@
 import { EServerRule } from "../../core/trigger/event/ERule";
 import { Trigger } from "../../core/trigger/function/Trigger";
-import { loadEnv } from "../load-env";
+import { loadNumber } from "../load-env";
 
 export class ServerRuleConfig extends Trigger<EServerRule> {
     // 默认无限制
-    private _limit = loadEnv('VALVE_SERVER_LIMIT', Number.POSITIVE_INFINITY);
+    private _limit = loadNumber('VALVE_SERVER_LIMIT', Number.POSITIVE_INFINITY);
     get limit() {
         return this._limit;
     }
