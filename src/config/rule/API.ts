@@ -43,7 +43,7 @@ export class APIRuleConfig extends Trigger<EAPIRule> {
         for (const { layer, rule } of this.rules) {
             // 检查当前API规则是否匹配给定的请求路径和方法
             if (layer.match(path, method)) {
-                return rule; // 返回匹配的API规则
+                return { layer, rule }; // 返回匹配的API规则
             }
         }
         return undefined; // 如果没有找到匹配的规则，则返回undefined
