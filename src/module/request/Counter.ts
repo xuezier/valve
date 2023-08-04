@@ -14,7 +14,7 @@ export class RequestCounter extends Module {
     }
 
     // 设置时间窗口
-    private set interval(interval) {
+    set interval(interval) {
         this._interval = interval;
     }
 

@@ -10,6 +10,10 @@ export class Config extends Trigger<EConfig> {
         return this._interval;
     }
 
+    set interval(interval: number) {
+        this._interval = interval;
+    }
+
     rule = {
         server: new ServerRuleConfig(),
         api: new APIRuleConfig(),
