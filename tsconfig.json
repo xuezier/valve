@@ -2,10 +2,10 @@
     "compileOnSave": true,
     "compilerOptions": {
         "resolveJsonModule": true,
-        "reactNamespace": "Ergate",
         "declaration": true,
         "target": "es2017",
         "module": "commonjs",
+        "removeComments": true,
         "moduleResolution": "node",
         "strict": true,
         "noImplicitAny": false,

@@ -93,7 +93,10 @@ export class RequestCounter extends Module {
      * @param api - APILayer对象
      * @returns 返回增加后的请求计数值
      */
-    addAPIRequest(api: APILayer) {
+    addAPIRequest(api?: APILayer) {
+        if(!api)
+            return 0;
+
         if(!this.APICounter.has(api))
             this.APICounter.set(api, new RequestCounter(this.interval));
 

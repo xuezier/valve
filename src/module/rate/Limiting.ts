@@ -55,7 +55,7 @@ export class RateLimitingController extends Module {
         // 增加总请求计数
         const requests = this.counter.addRequest();
         // 增加API请求计数，如果没有对应的API规则，则APIRequests为0
-        const APIRequests = APIRule ? this.counter.addAPIRequest(APIRule.layer) : 0;
+        const APIRequests = APIRule ? this.counter.addAPIRequest(APIRule) : 0;
 
         // 过滤器判断，如果通过所有过滤器，则不被限流
         const isFilterPass = this.filter(request);
