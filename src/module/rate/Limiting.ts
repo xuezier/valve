@@ -42,6 +42,7 @@ export class RateLimitingController extends Module {
 
         // 获取请求计数器实例
         this._counter = valve.counter;
+        this._config = valve.config;
     }
 
     /**
@@ -72,6 +73,7 @@ export class RateLimitingController extends Module {
 
     // 判断总请求数是否超过服务器限制
     private isServerLimited(request: number) {
+        console.log(request)
         return request > this.config.rule.server.limit;
     }
 
@@ -103,7 +105,7 @@ export class RateLimitingController extends Module {
     responseLimited(response: ServerResponse) {
         // 发送429状态码和限流响应内容
         response.writeHead(429, { 'Content-Type': 'text/plain' });
-        response.end(`Too many requests from this IP, please try again in ${this.counter.interval}s.`);
+        response.end(`Too many requests, please try again in ${this.counter.interval / 1000}s.`);
 
         return true;
     }

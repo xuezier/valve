@@ -1,1 +1,3 @@
-export * from './module'
+export * from './Valve';
+
+export * from './module';

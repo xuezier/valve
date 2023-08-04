@@ -6,6 +6,7 @@ import { TMethod } from "./core/server/type/TMethods";
 import { EValve } from "./core/trigger/event/EValve";
 import { Trigger } from "./core/trigger/function/Trigger";
 import { RateLimitingController, RequestCounter } from "./module";
+import { install } from './core/server/install';
 
 export class Valve extends Trigger<EValve> {
     private _config = new Config();
@@ -54,5 +55,7 @@ export class Valve extends Trigger<EValve> {
             if(server)
                 this.config.rule.server.limit = server.limit;
         }
+
+        install(this.rateLimitingController);
     }
 }

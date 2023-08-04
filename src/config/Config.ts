@@ -11,7 +11,7 @@ export class Config extends Trigger<EConfig> {
     }
 
     set interval(interval: number) {
-        this._interval = interval;
+        this._interval = interval * 1000;
     }
 
     rule = {

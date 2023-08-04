@@ -1,3 +1,5 @@
+import * as assert from 'assert';
+
 import { EAPIRule } from "../../core/trigger/event/ERule";
 import { Trigger } from "../../core/trigger/function/Trigger";
 import { TRule } from './type/TRule';
@@ -20,6 +22,9 @@ export class APIRuleConfig extends Trigger<EAPIRule> {
      * @param rule - API规则对象
      */
     addRule(method: TMethod, path: string, rule: TRule) {
+        assert(typeof path === 'string', new TypeError(`rule path must be a string, but got type: ${typeof path}`));
+        assert(typeof rule.limit === 'number' && rule.limit > 0, new TypeError(`rule limit must be a number and bigger than 0, but gou value: ${rule.limit}`));
+
         // 检查是否已存在相同的API规则
         const existsRuleLayer = this.getRule(path, method);
         if (existsRuleLayer) {

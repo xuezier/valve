@@ -15,7 +15,7 @@ export class RequestCounter extends Module {
 
     // 设置时间窗口
     set interval(interval) {
-        this._interval = interval;
+        this._interval = interval * 1000;
     }
 
     // 上次计数重置的时间戳
@@ -64,7 +64,7 @@ export class RequestCounter extends Module {
 
         // 如果传入了时间窗口参数，则将时间窗口转换为毫秒并赋值给_interval
         if (interval)
-            this.interval = interval * 1000;
+            this.interval = interval;
 
         // 注册触发器的'reset'事件，当触发该事件时执行reset方法
         this.trigger.on('reset', () => this.reset());
