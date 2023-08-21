@@ -1,3 +1,3 @@
 import { IncomingMessage } from 'http';
 
-export type Filter = (req: IncomingMessage) => boolean;
+export type Filter = (request: IncomingMessage) => boolean;

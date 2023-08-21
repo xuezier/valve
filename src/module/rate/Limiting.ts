@@ -52,6 +52,14 @@ export class RateLimitingController extends Module {
         this._logger = valve.logger;
     }
 
+    setFilter(...filters: Filter[]) {
+        this.filters.push(...filters)
+
+        if(this.filters.length)
+            this.logger.warn(`more than 20 filters, may have a performance impact`);
+
+    }
+
     /**
      * 判断请求是否被限流
      * @param request - 请求对象

@@ -1,5 +1,6 @@
 import { TRule } from "./config/rule/type/TRule";
 import { TMethod } from "./core/server/type/TMethods";
+import { Filter } from "./module/rate/type/Filter";
 
 export type ValveOptions = {
     rule?: {
@@ -20,4 +21,6 @@ export type ValveOptions = {
 
     logger?: any;
     debug?: boolean;
+
+    filters?: Filter[];
 }

@@ -48,7 +48,7 @@ export class Valve extends Trigger<EValve> {
     constructor(options: ValveOptions) {
         super();
 
-        const { rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false } = options;
+        const { rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false, filters = [] } = options;
         this._logger = new Logger(console, debug);
         if(logger)
             this.logger.logger = logger;
@@ -82,6 +82,8 @@ export class Valve extends Trigger<EValve> {
         if(requestPropertyName) {
             assert(typeof requestPropertyName === 'string' && requestPropertyName.length < 512, new TypeError(`options.requestPropertyName must be a string and its length must be less than 512`));
         }
+
+        this.rateLimitingController.setFilter(...filters);
 
         install(this.rateLimitingController);
     }

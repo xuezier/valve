@@ -39,7 +39,7 @@ export class Config extends Trigger<EConfig> {
         this._statusCode = statusCode;
     }
 
-    private _requestPropertyName = 'rate';
+    private _requestPropertyName = 'valve';
     get requestPropertyName() {
         return this._requestPropertyName;
     }
