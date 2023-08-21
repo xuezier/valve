@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
-import { ERateLimitingContriller } from "../../core/trigger/event/ERateLimitingController";
+import { ERateLimitingController } from "../../core/trigger/event/ERateLimitingController";
 import { Trigger } from "../../core/trigger/function/Trigger";
 import { Module } from "../base/Module";
 import { Filter } from "./type/Filter";
@@ -9,11 +9,12 @@ import { Valve } from '../../Valve';
 import { Config } from '../../config/Config';
 import { TMethod } from '../../core/server/type/TMethods';
 import { TRule } from '../../config/rule/type/TRule';
+import { Logger } from '../../util/Logger';
 
 // RateLimitingController类用于控制请求的限流
 export class RateLimitingController extends Module {
     // 触发器实例，用于触发事件
-    private _trigger = new Trigger<ERateLimitingContriller>()
+    private _trigger = new Trigger<ERateLimitingController>()
     get trigger() {
         return this._trigger;
     }
@@ -36,6 +37,11 @@ export class RateLimitingController extends Module {
         return this._config;
     }
 
+    private _logger: Logger;
+    get logger() {
+        return this._logger;
+    }
+
     // 构造函数
     constructor(valve: Valve) {
         super();
@@ -43,6 +49,7 @@ export class RateLimitingController extends Module {
         // 获取请求计数器实例
         this._counter = valve.counter;
         this._config = valve.config;
+        this._logger = valve.logger;
     }
 
     /**
@@ -73,7 +80,6 @@ export class RateLimitingController extends Module {
 
     // 判断总请求数是否超过服务器限制
     private isServerLimited(request: number) {
-        console.log(request)
         return request > this.config.rule.server.limit;
     }
 
@@ -103,9 +109,12 @@ export class RateLimitingController extends Module {
      * @returns 返回一个布尔值，表示是否已发送限流响应
      */
     responseLimited(response: ServerResponse) {
+        if(this.config.isSendRetry)
+            response.setHeader('Retry-After', this.counter.interval / 1000);
+
         // 发送429状态码和限流响应内容
-        response.writeHead(429, { 'Content-Type': 'text/plain' });
-        response.end(`Too many requests, please try again in ${this.counter.interval / 1000}s.`);
+        response.writeHead(this.config.statusCode, { 'Content-Type': 'text/plain' });
+        response.end(this.config.message);
 
         return true;
     }

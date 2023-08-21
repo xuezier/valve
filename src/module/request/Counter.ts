@@ -1,3 +1,4 @@
+import { Valve } from "../../Valve";
 import { APILayer } from "../../core/server/APILayer";
 import { ECounter } from "../../core/trigger/event/ECounter";
 import { Trigger } from "../../core/trigger/function/Trigger";
@@ -5,17 +6,9 @@ import { Module } from "../base/Module";
 
 // RequestCounter类用于计算请求的频率和次数
 export class RequestCounter extends Module {
-    // 默认的时间窗口为60秒
-    private _interval = 60 * 1000;
-
     // 获取时间窗口
     get interval() {
-        return this._interval;
-    }
-
-    // 设置时间窗口
-    set interval(interval) {
-        this._interval = interval * 1000;
+        return this.valve.config.interval;
     }
 
     // 上次计数重置的时间戳
@@ -58,13 +51,8 @@ export class RequestCounter extends Module {
         return this._APICounter;
     }
 
-    // 构造函数，接受一个可选的时间窗口参数，单位为秒
-    constructor(interval?: number) {
+    constructor(private valve: Valve) {
         super();
-
-        // 如果传入了时间窗口参数，则将时间窗口转换为毫秒并赋值给_interval
-        if (interval)
-            this.interval = interval;
 
         // 注册触发器的'reset'事件，当触发该事件时执行reset方法
         this.trigger.on('reset', () => this.reset());
@@ -88,6 +76,16 @@ export class RequestCounter extends Module {
         return this.count;
     }
 
+    getAPICounter(api?: APILayer) {
+        if(!api)
+            return;
+
+        if(!this.APICounter.has(api))
+            this.APICounter.set(api, new RequestCounter(this.valve));
+
+        return (<RequestCounter>this.APICounter.get(api))
+    }
+
     /**
      * 增加指定API的请求计数
      * @param api - APILayer对象
@@ -98,7 +96,7 @@ export class RequestCounter extends Module {
             return 0;
 
         if(!this.APICounter.has(api))
-            this.APICounter.set(api, new RequestCounter(this.interval));
+            this.APICounter.set(api, new RequestCounter(this.valve));
 
         return (<RequestCounter>this.APICounter.get(api)).addRequest();
     }

@@ -1,1 +1,1 @@
-export type ERateLimitingContriller = 'enabled' | 'disabled' | 'triggered';
+export type ERateLimitingController = 'enabled' | 'disabled' | 'triggered';
