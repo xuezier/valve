@@ -24,6 +24,10 @@
     "engines": {
         "node": ">=12"
     },
+    "maintainers": [{
+        "email": "tunan@gaoding.com",
+        "name": "tunan"
+    }],
     "dependencies": {
         "path-to-regexp": "^6.2.1"
     }
