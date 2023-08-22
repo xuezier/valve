@@ -9,7 +9,6 @@ on:
 
 jobs:
   publish-npm:
-    needs: build
     runs-on: [ self-hosted ]
     steps:
       - uses: actions/checkout@v2
