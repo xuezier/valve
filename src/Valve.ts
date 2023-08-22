@@ -5,9 +5,9 @@ import { Config } from "./config/Config";
 import { EValve } from "./core/trigger/event/EValve";
 import { Trigger } from "./core/trigger/function/Trigger";
 import { RateLimitingController, RequestCounter } from "./module";
-import { install } from './core/server/install';
 import { ValveOptions } from './ValveOptions';
 import { Logger } from './util/Logger';
+import { Injector } from './core/server/Injector';
 
 export class Valve extends Trigger<EValve> {
     private _hostname = os.hostname();
@@ -44,6 +44,8 @@ export class Valve extends Trigger<EValve> {
     get logger() {
         return this._logger;
     }
+
+    private Injector = Injector;
 
     constructor(options: ValveOptions) {
         super();
@@ -84,7 +86,6 @@ export class Valve extends Trigger<EValve> {
         }
 
         this.rateLimitingController.setFilter(...filters);
-
-        install(this.rateLimitingController);
+        this.Injector.rate = this.rateLimitingController;
     }
 }
