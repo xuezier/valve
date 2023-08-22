@@ -41,6 +41,9 @@ export class RateLimitingController extends Module {
     get logger() {
         return this._logger;
     }
+    set logger(logger) {
+        this._logger = logger;
+    }
 
     // 构造函数
     constructor(valve: Valve) {
@@ -55,7 +58,7 @@ export class RateLimitingController extends Module {
     setFilter(...filters: Filter[]) {
         this.filters.push(...filters)
 
-        if(this.filters.length)
+        if(this.filters.length > 20)
             this.logger.warn(`more than 20 filters, may have a performance impact`);
 
     }

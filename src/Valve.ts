@@ -55,6 +55,8 @@ export class Valve extends Trigger<EValve> {
         if(logger)
             this.logger.logger = logger;
 
+        this.rateLimitingController.logger = this.logger;
+
 
         if(interval) {
             assert(typeof interval === 'number', new TypeError(`options.interval must be a number`));
