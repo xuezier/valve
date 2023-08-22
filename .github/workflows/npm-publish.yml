@@ -12,12 +12,22 @@ jobs:
     runs-on: [ self-hosted ]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: 16
           registry-url: https://registry-npm.gaoding.com/
-      - run: npm install
-      - run: npm run build
-      - run: npm publish
+
+      - name: Install dependencies
+        run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Compile Code
+        run: npm run build
+      - name: Publish package
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
