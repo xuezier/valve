@@ -1,6 +1,6 @@
 {
     "name": "@gaoding/valve",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Node.js http rate limiting plugin",
     "main": "dist/index.js",
     "scripts": {
@@ -24,10 +24,12 @@
     "engines": {
         "node": ">=12"
     },
-    "maintainers": [{
-        "email": "tunan@gaoding.com",
-        "name": "tunan"
-    }],
+    "maintainers": [
+        {
+            "email": "tunan@gaoding.com",
+            "name": "tunan"
+        }
+    ],
     "dependencies": {
         "path-to-regexp": "^6.2.1"
     }
