@@ -1,6 +1,7 @@
 // 导入所需模块和类
 import { EConfig } from "../core/trigger/event/EConfig";
 import { Trigger } from "../core/trigger/function/Trigger";
+import { convertStorage } from "../util/storage";
 import { loadNumber } from "./load-env";
 import { APIRuleConfig } from "./rule/API";
 import { IPRuleConfig } from "./rule/IP";
@@ -75,8 +76,8 @@ export class Config extends Trigger<EConfig> {
         collectInterval: 5000,
         limitThreshold: 2,
         limit: {
-            cpu: 0,
-            memory: 0,
+            cpu: 1,
+            memory: convertStorage('1GB', 'B'),
         },
         recoveryThreshold: 1,
         recovery: {
