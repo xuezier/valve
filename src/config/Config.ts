@@ -8,6 +8,8 @@ import { ServerRuleConfig } from "./rule/Server";
 
 // 创建 Config 类，继承自 Trigger<EConfig> 类
 export class Config extends Trigger<EConfig> {
+    enable = true;
+
     // 私有属性 _interval，用于存储时间间隔，默认为加载环境变量 'VALVE_INTERVAL' 的值，单位为毫秒
     private _interval = loadNumber('VALVE_INTERVAL', 60 * 1000);
 
@@ -66,5 +68,20 @@ export class Config extends Trigger<EConfig> {
     // 设置是否发送重试请求的访问器方法
     set isSendRetry(isSendRetry) {
         this._isSendRetry = isSendRetry;
+    }
+
+    performance = {
+        enable: false,
+        collectInterval: 5000,
+        limitThreshold: 2,
+        limit: {
+            cpu: 0,
+            memory: 0,
+        },
+        recoveryThreshold: 1,
+        recovery: {
+            cpu: 0,
+            memory: 0,
+        }
     }
 }

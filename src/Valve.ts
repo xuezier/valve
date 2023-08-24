@@ -8,6 +8,9 @@ import { RateLimitingController, RequestCounter } from "./module";
 import { ValveOptions } from './ValveOptions';
 import { Logger } from './util/Logger';
 import { Injector } from './core/server/Injector';
+import { PerformanceCollector } from './module/performance/Performance';
+import { convertStorage, testStorage } from './util/storage';
+import { register } from './core/events/register';
 
 export class Valve extends Trigger<EValve> {
     private _hostname = os.hostname();
@@ -40,6 +43,11 @@ export class Valve extends Trigger<EValve> {
         return this._rateLimitingController;
     }
 
+    private _performanceCollector = new PerformanceCollector();
+    get performanceCollector() {
+        return this._performanceCollector;
+    }
+
     private _logger: Logger;
     get logger() {
         return this._logger;
@@ -50,7 +58,7 @@ export class Valve extends Trigger<EValve> {
     constructor(options: ValveOptions) {
         super();
 
-        const { rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false, filters = [] } = options;
+        const { enable = true, rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false, filters = [], performance } = options;
         this._logger = new Logger(console, debug);
         if(logger)
             this.logger.logger = logger;
@@ -87,7 +95,59 @@ export class Valve extends Trigger<EValve> {
             assert(typeof requestPropertyName === 'string' && requestPropertyName.length < 512, new TypeError(`options.requestPropertyName must be a string and its length must be less than 512`));
         }
 
+        if(performance) {
+            const { limit, recovery, enable, limitThreshold, recoveryThreshold } = performance;
+            if (enable) {
+                assert(!!limit && !!recovery, new TypeError(`options.performance.limit and options.performance.recovery must be set`));
+                this.config.performance.enable = true;
+
+                if(limit) {
+                    const { cpu, memory } = limit;
+                    if(cpu) {
+                        assert(typeof cpu === 'number' && cpu > 0 && cpu < 1, new TypeError(`options.performance.limit.cpu must be a number and its value must be between 0 and 1`));
+                        this.config.performance.limit.cpu = cpu;
+                    }
+                    if(memory) {
+                        assert(typeof memory === 'string' && testStorage(memory), new TypeError(`options.performance.limit.memory must be a string and its value must be a valid storage like 100MB`));
+                        this.config.performance.limit.memory = convertStorage(memory, 'B');
+                    }
+                }
+                if(recovery) {
+                    const { cpu, memory } = recovery;
+                    if(cpu) {
+                        assert(typeof cpu === 'number' && cpu > 0 && cpu < 1, new TypeError(`options.performance.recovery.cpu must be a number and its value must be between 0 and 1`));
+                        this.config.performance.recovery.cpu = cpu;
+                    }
+                    if(memory) {
+                        assert(typeof memory === 'string' && testStorage(memory), new TypeError(`options.performance.recovery.memory must be a string and its value must be a valid storage like 100MB`));
+                        this.config.performance.recovery.memory = convertStorage(memory, 'B');
+                    }
+                }
+
+                if(this.config.performance.limit.cpu <= this.config.performance.recovery.cpu)
+                    throw new TypeError(`options.performance.limit.cpu must be greater than options.performance.recovery.cpu`);
+
+                if(this.config.performance.limit.memory <= this.config.performance.recovery.memory)
+                    throw new TypeError(`options.performance.limit.memory must be greater than options.performance.recovery.memory`);
+
+                if(limitThreshold) {
+                    assert(typeof limitThreshold === 'number' && limitThreshold > 0, new TypeError(`options.performance.limitThreshold must be a number and its value must be greater than 0`));
+                    this.config.performance.limitThreshold = ~~limitThreshold;
+                }
+
+                if(recoveryThreshold) {
+                    assert(typeof recoveryThreshold === 'number' && recoveryThreshold > 0, new TypeError(`options.performance.recoveryThreshold must be a number and its value must be greater than 0`));
+                    this.config.performance.recoveryThreshold = ~~recoveryThreshold;
+                }
+            }
+        }
+
+        this.config.enable = !!enable;
         this.rateLimitingController.setFilter(...filters);
+
+        if(this.config.enable)
         this.Injector.rate = this.rateLimitingController;
+
+        register(this);
     }
 }

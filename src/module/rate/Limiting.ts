@@ -45,6 +45,8 @@ export class RateLimitingController extends Module {
         this._logger = logger;
     }
 
+    force = false;
+
     // 构造函数
     constructor(valve: Valve) {
         super();

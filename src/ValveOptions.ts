@@ -3,6 +3,8 @@ import { TMethod } from "./core/server/type/TMethods";
 import { Filter } from "./module/rate/type/Filter";
 
 export type ValveOptions = {
+    enable?: boolean;
+
     rule?: {
         api?: {
             path: string;
@@ -23,4 +25,18 @@ export type ValveOptions = {
     debug?: boolean;
 
     filters?: Filter[];
+
+    performance?: {
+        enable?: boolean;
+        limitThreshold?: number;
+        limit?: {
+            cpu?: number;
+            memory?: string;
+        };
+        recoveryThreshold?: number;
+        recovery?: {
+            cpu?: number;
+            memory?: string;
+        }
+    }
 }

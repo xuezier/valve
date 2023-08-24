@@ -32,7 +32,7 @@ export class Logger {
         if(!this._isDebug)
             return;
 
-        return this._logger[level](message, ...args);
+        return this._logger[level](`[valve-${level}] ${message}`, ...args);
     }
 
 
