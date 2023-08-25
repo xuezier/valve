@@ -1,6 +1,7 @@
 // 导入所需模块和类
 import { EConfig } from "../core/trigger/event/EConfig";
 import { Trigger } from "../core/trigger/function/Trigger";
+import { convertStorage } from "../util/storage";
 import { loadNumber } from "./load-env";
 import { APIRuleConfig } from "./rule/API";
 import { IPRuleConfig } from "./rule/IP";
@@ -8,6 +9,8 @@ import { ServerRuleConfig } from "./rule/Server";
 
 // 创建 Config 类，继承自 Trigger<EConfig> 类
 export class Config extends Trigger<EConfig> {
+    enable = true;
+
     // 私有属性 _interval，用于存储时间间隔，默认为加载环境变量 'VALVE_INTERVAL' 的值，单位为毫秒
     private _interval = loadNumber('VALVE_INTERVAL', 60 * 1000);
 
@@ -66,5 +69,20 @@ export class Config extends Trigger<EConfig> {
     // 设置是否发送重试请求的访问器方法
     set isSendRetry(isSendRetry) {
         this._isSendRetry = isSendRetry;
+    }
+
+    performance = {
+        enable: false,
+        collectInterval: 5000,
+        limitThreshold: 2,
+        limit: {
+            cpu: 1,
+            memory: convertStorage('1GB', 'B'),
+        },
+        recoveryThreshold: 1,
+        recovery: {
+            cpu: 0,
+            memory: 0,
+        }
     }
 }

@@ -76,6 +76,13 @@ export class RequestCounter extends Module {
         return this.count;
     }
 
+    estimateCount() {
+        // 获取当前时间戳
+        const now = Date.now();
+
+        return ~~(this.count * this.interval / (now - this.lastReset));
+    }
+
     getAPICounter(api?: APILayer) {
         if(!api)
             return;

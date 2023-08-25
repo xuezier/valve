@@ -5,6 +5,8 @@ import { Injector } from './Injector';
 export function httpCallback(callback: http.RequestListener) {
     return (req: http.IncomingMessage, res: http.ServerResponse) => {
         const rate = Injector.rate;
+        if(rate.config.enable === false)
+            return callback(req, res);
 
         Object.defineProperty(req, rate.config.requestPropertyName, {
             value: new Patcher(rate, req, res),

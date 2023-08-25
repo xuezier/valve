@@ -17,6 +17,7 @@ npm install @gaoding/valve [--save]
 
 ## Configuration
 
+- `enable` - `Optional, type:Boolean`, 是否开启限流，默认 true
 - `rule` - `Optional, type:Object`, 限流规则, 默认无上限
 - `rule.api` - `Optional, type:Array<Object>`, API 限流规则
 - `rule.api.path` - `Required, type:String`, API 路径
@@ -32,6 +33,16 @@ npm install @gaoding/valve [--save]
 - `requestPropertyName` - `Optional, type:String`, 限流信息绑定在 request 对象上的属性名，默认 `valve`
 - `filters` - `Optional, type:Array<Filter>`, 限流拦截器，通过则对当前请求不限流，只要通过一个拦截器即可
 - `logger`-`Optional, type:Any`, 自定义 Logger，默认 Console
+- `performance`-`Optional,type:Object`, 性能配置，开启自适应限流的时候需要配置
+- `performance.enable`-`Optional, type:Boolean`, 是否开启自适应限流，默认 false
+- `performance.limitThreshold`-`Optional, type:Number`, 超过性能限制次数，当超过该次数，将开启限流，默认 2
+- `performance.limit`-`Optional, type:Object`, 自适应限流的上限配置
+- `performance.limit.cpu`-`Optional, type:Number`, cpu 上限，取值 0-1, 默认 1,
+- `performance.limit.memory`-`Optional, type:String`, 内存上限，支持单位：`B`, `KB`, `MB`, `GB`，默认 '1GB',
+- `performance.recoveryThreshold`-`Optional, type:Number`, 低于性能限制次数，当低于该次数，将关闭限流，默认 1
+- `performance.recovery`-`Optional, type:Object`, 自适应限流的下限配置
+- `performance.recovery.cpu`-`Optional, type:Number`, cpu 下限，取值 0-1, 默认 0,
+- `performance.recovery.memory`-`Optional, type:String`, 内存下限，支持单位：`B`, `KB`, `MB`, `GB`，默认 '0GB',
 - `debug`-`Optional, type:Boolean`, 是否输出调试日志，默认 false
 
 ```ts
@@ -41,6 +52,7 @@ type Filter = (request: http.IncomingMessage) => boolean;
 Example:
 ```ts
 const options = {
+    enable: true,
     rule:{
         server: {
             limit: 300,
@@ -67,6 +79,19 @@ const options = {
             return request.headers['x-user-id'] == 1;
         }
     ],
+    performance: {
+        enable: true,
+        limitThreshold: 2,
+        limit: {
+            cpu: 0.8,
+            memory: '1GB',
+        },
+        recoveryThreshold: 1,
+        recovery: {
+            cpu: 0.2,
+            memory: '0GB',
+        },
+    },
     debug: false,
 }
 ```
