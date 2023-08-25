@@ -1,4 +1,5 @@
 import { TRule } from "./config/rule/type/TRule";
+import { TStorage } from "./config/rule/type/TStorage";
 import { TMethod } from "./core/server/type/TMethods";
 import { Filter } from "./module/rate/type/Filter";
 
@@ -13,6 +14,12 @@ export type ValveOptions = {
         }[];
         server?: {
             limit: number;
+        };
+        ip?: {
+            storage?: TStorage;
+            limit: number;
+            whiteList?: string[];
+            blackList?: string[];
         }
     };
     interval?: number;
