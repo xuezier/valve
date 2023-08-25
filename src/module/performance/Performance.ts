@@ -64,7 +64,7 @@ export class PerformanceCollector extends Trigger<EPerformanceCollector> {
     }
 
     private reCollect(interval: number) {
-        clearInterval(this.interval);
+        clearInterval(this.interval as any);
 
         this.reStore();
         this.collect(interval);
