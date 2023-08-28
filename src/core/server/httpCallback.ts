@@ -3,7 +3,7 @@ import { Patcher } from '../../module/patch/Pacher';
 import { Injector } from './Injector';
 
 export function httpCallback(callback: http.RequestListener) {
-    return (req: http.IncomingMessage, res: http.ServerResponse) => {
+    return async (req: http.IncomingMessage, res: http.ServerResponse) => {
         const rate = Injector.rate;
         if(rate.config.enable === false)
             return callback(req, res);
@@ -15,7 +15,7 @@ export function httpCallback(callback: http.RequestListener) {
             writable: false,
         });
 
-        const isLimitedRequest = rate.isLimitingRequest(req);
+        const isLimitedRequest = await rate.isLimitingRequest(req);
         if(isLimitedRequest)
             return rate.responseLimited(res);
 

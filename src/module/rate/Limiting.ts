@@ -71,7 +71,7 @@ export class RateLimitingController extends Module {
      * @param request - 请求对象
      * @returns 返回一个布尔值，表示请求是否被限流
      */
-    isLimitingRequest(request: IncomingMessage) {
+    async isLimitingRequest(request: IncomingMessage) {
         // 获取请求对应的API规则
         const APIRule = this.config.rule.api.getRule(request.url as string, request.method as TMethod);
         // 增加总请求计数
@@ -85,9 +85,9 @@ export class RateLimitingController extends Module {
             return false;
 
         if(this.config.rule.ip.enbale) {
-            const isIPLimited = this.config.rule.ip.isLimiting(getRealIP(request));
+            const isIPLimited = await this.config.rule.ip.isLimiting(getRealIP(request));
 
-            if(isAPILimited)
+            if(isIPLimited)
                 return true;
         }
 

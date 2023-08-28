@@ -100,7 +100,9 @@ export class IPRuleConfig {
      * @param ip - 要检查的 IP。
      * @returns 如果 IP 达到限制则返回 true，否则返回 false。
      */
-    async isLimiting(ip: string) {
+    async isLimiting(ip?: string) {
+        if(!ip) return true;
+
         if (ip === '127.0.0.1') return true;
 
         if (this.isWhite(ip)) return false;
