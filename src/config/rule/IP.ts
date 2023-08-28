@@ -46,7 +46,7 @@ export class IPRuleConfig {
         const { storage, interval, limit, whiteList, blackList, enable } = options;
 
         this.storage = new Storage({ storage, interval });
-        this.limit = limit;
+        this.limit = ~~limit;
         this.enbale = !!enable;
         this.setWhite(whiteList || []);
         this.setBlock(blackList || []);
@@ -110,5 +110,10 @@ export class IPRuleConfig {
         const count = await this.storage.incr(ip);
 
         return count > this.limit;
+    }
+
+    start() {
+        if(this.enbale)
+            this.storage.start();
     }
 }
