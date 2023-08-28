@@ -53,7 +53,7 @@ export class Valve extends Trigger<EValve> {
         return this._logger;
     }
 
-    private Injector = Injector;
+    Injector = Injector;
 
     constructor(options: ValveOptions) {
         super();
@@ -72,11 +72,15 @@ export class Valve extends Trigger<EValve> {
         }
 
         if (rule) {
-            const { api = [], server } = rule;
+            const { api = [], server, ip } = rule;
 
             this.config.rule.api.addRules(api);
             if(server)
                 this.config.rule.server.limit = server.limit;
+
+            if(ip) {
+                this.config.rule.ip.setOptions({ ...ip, interval: this.config.interval });
+            }
         }
 
         if (message) {
@@ -145,9 +149,8 @@ export class Valve extends Trigger<EValve> {
         this.config.enable = !!enable;
         this.rateLimitingController.setFilter(...filters);
 
-        if(this.config.enable)
-        this.Injector.rate = this.rateLimitingController;
-
         register(this);
+        if(this.config.enable)
+            this.emit('ready');
     }
 }

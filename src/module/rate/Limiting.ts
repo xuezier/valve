@@ -10,6 +10,7 @@ import { Config } from '../../config/Config';
 import { TMethod } from '../../core/server/type/TMethods';
 import { TRule } from '../../config/rule/type/TRule';
 import { Logger } from '../../util/Logger';
+import { getRealIP } from '../../util/get-real-ip';
 
 // RateLimitingController类用于控制请求的限流
 export class RateLimitingController extends Module {
@@ -82,6 +83,13 @@ export class RateLimitingController extends Module {
         const isFilterPass = this.filter(request);
         if(isFilterPass)
             return false;
+
+        if(this.config.rule.ip.enbale) {
+            const isIPLimited = this.config.rule.ip.isLimiting(getRealIP(request));
+
+            if(isAPILimited)
+                return true;
+        }
 
         // 判断总请求数是否超过服务器限制
         const isServerLimited = this.isServerLimited(requests);
