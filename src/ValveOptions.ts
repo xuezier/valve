@@ -16,6 +16,7 @@ export type ValveOptions = {
             limit: number;
         };
         ip?: {
+            enable?: boolean;
             storage?: TStorage;
             limit: number;
             whiteList?: string[];
