@@ -1,3 +1,5 @@
+import * as os from 'os';
+
 // 导入所需模块和类
 import { EConfig } from "../core/trigger/event/EConfig";
 import { Trigger } from "../core/trigger/function/Trigger";
@@ -85,4 +87,6 @@ export class Config extends Trigger<EConfig> {
             memory: 0,
         }
     }
+
+    sockPath = `${os.tmpdir()}/valve.sock`;
 }
