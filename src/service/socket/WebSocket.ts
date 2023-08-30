@@ -5,6 +5,7 @@ import { EWebSocket } from "./event/EWebSocket";
 import { connect } from './websocket/handler/connect';
 import { Frame } from './websocket/Frame';
 import { resolveChunk } from './websocket/handler/resolveChunk';
+import { PacketMessage } from './websocket/packet/PacketMessage';
 
 type STATUS = 'connecting' | 'connected' | 'closing' | 'closed';
 type DATA_STATUS = 'pending' | 'idle';
@@ -43,6 +44,7 @@ export class WebSocket extends Trigger<EWebSocket> {
         const protocol = connectionHeader[0];
         if(protocol === 'HTTP/1.1 101 Switching Protocols') {
             this.status = 'connected';
+            this.emit('connection');
             console.log('websocket connected');
             return;
         }
@@ -114,6 +116,15 @@ export class WebSocket extends Trigger<EWebSocket> {
             return this.emit('frame', frame);
 
         this.handleData(undefined, true);
+    }
+
+    sendMessage(message: string | object) {
+        if(typeof message === 'object')
+            message = JSON.stringify(message);
+
+        const packet = new PacketMessage(message);
+        // return packet
+        this.socket.write(packet.toString());
     }
 
     static connect(options: net.NetConnectOpts) {
