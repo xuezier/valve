@@ -5,7 +5,7 @@ import { FrameType } from '../constants/FrameType'; // 导入 WebSocket 帧类�
 export class PacketMessage {
     packet: Buffer; // PacketMessage 的数据包
 
-    constructor(message: string) {
+    constructor(message: string, Opcode = FrameType.TEXT) {
         const bytes = Buffer.from(message); // 将消息转换为字节数组
         const messageLength = bytes.length; // 消息的长度
         const mask = crypto.randomBytes(4); // 生成随机掩码
@@ -24,7 +24,7 @@ export class PacketMessage {
 
         // 创建一个包含消息的数据包
         const packet = Buffer.alloc(messageLength + offset);
-        packet[0] = FrameType.TEXT | 0x80; // 设置帧类型为文本帧，并启用 FIN
+        packet[0] = Opcode | 0x80; // 设置帧类型为文本帧，并启用 FIN
         packet[1] = payloadLength; // 设置负载长度
 
         // 根据负载长度写入消息长度信息

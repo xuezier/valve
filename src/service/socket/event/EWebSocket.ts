@@ -1,1 +1,1 @@
-export type EWebSocket = 'connection' | 'data' | 'close' | 'frame';
+export type EWebSocket = 'connection' | 'data' | 'close' | 'frame' | 'ping';

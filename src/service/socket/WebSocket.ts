@@ -6,6 +6,7 @@ import { connect } from './websocket/handler/connect';
 import { Frame } from './websocket/Frame';
 import { resolveChunk } from './websocket/handler/resolveChunk';
 import { PacketMessage } from './websocket/packet/PacketMessage';
+import { FrameType } from './websocket/constants/FrameType';
 
 // WebSocket 状态类型
 type STATUS = 'connecting' | 'connected' | 'closing' | 'closed';
@@ -39,6 +40,8 @@ export class WebSocket extends Trigger<EWebSocket> {
         this.on('data', this.handleData.bind(this));
         // 监听 'frame' 事件，处理帧
         this.on('frame', this.handleFrame.bind(this));
+        this.on('ping', this.handlePing.bind(this));
+        this.on('close', this.handleClose.bind(this));
 
         // 连接 WebSocket
         connect(socket, auth);
@@ -84,6 +87,18 @@ export class WebSocket extends Trigger<EWebSocket> {
         throw new Error('Invalid protocol');
     }
 
+    private handleClose(frame: Frame) {
+        console.log('got close:', frame.toString());
+
+        this.socket.destroy();
+    }
+
+    private handlePing(frame: Frame) {
+        console.log('got ping:', frame.toString());
+
+        this.sendMessage('pong', FrameType.PONG);
+    }
+
     // 处理完整的帧
     private handleFrame(frame: Frame) {
         this.frameCount++;
@@ -91,7 +106,11 @@ export class WebSocket extends Trigger<EWebSocket> {
         this.currentFrame = undefined;
         this.dataStatus = 'idle';
 
-        console.log(this.frameCount, frame.toString()); // 记录帧数和帧内容
+        if(frame.type === FrameType.PING)
+            this.emit('ping', frame);
+        else if(frame.type === FrameType.CLOSE)
+            this.emit('close', frame);
+
         return this.handleData();
     }
 
@@ -182,11 +201,11 @@ export class WebSocket extends Trigger<EWebSocket> {
 
 
     // 发送消息
-    sendMessage(message: string | object) {
+    sendMessage(message: string | object, Opcode = FrameType.TEXT) {
         if (typeof message === 'object')
             message = JSON.stringify(message);
 
-        const packet = new PacketMessage(message);
+        const packet = new PacketMessage(message, Opcode);
         this.socket.write(packet.toString());
     }
 
