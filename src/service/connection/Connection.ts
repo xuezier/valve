@@ -1,3 +1,5 @@
+import * as os from 'os';
+
 import { Trigger } from "../../core/trigger/function/Trigger";
 import { WebSocket } from "../socket/WebSocket";
 import { Econnection } from "./type/EConnection";
@@ -17,10 +19,12 @@ export class Connection extends Trigger<Econnection> {
         const socket = WebSocket.connect({
             host: server.host,
             port: server.port || 80,
+        }, {
+            appid,
+            secret,
+            hostname: os.hostname(),
         });
 
-        socket.once('connection', () => {
-            socket.sendMessage({ appid, secret });
-        })
+        this.socket = socket;
     }
 }

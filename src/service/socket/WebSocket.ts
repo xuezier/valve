@@ -19,7 +19,7 @@ export class WebSocket extends Trigger<EWebSocket> {
     private currentFrame?: Frame;
     private frames: Buffer[] = [];
 
-    constructor(private socket: Socket) {
+    constructor(private socket: Socket, auth: { appid: number; secret: string; hostname: string }) {
         super();
 
         this.socket.on('data', this.handleSocketData.bind(this));
@@ -27,7 +27,7 @@ export class WebSocket extends Trigger<EWebSocket> {
         this.on('data', this.handleData.bind(this));
         this.on('frame', this.handleFrame.bind(this));
 
-        connect(socket);
+        connect(socket, auth);
     }
 
     private handleSocketData(chunk: Buffer) {
@@ -127,9 +127,9 @@ export class WebSocket extends Trigger<EWebSocket> {
         this.socket.write(packet.toString());
     }
 
-    static connect(options: net.NetConnectOpts) {
+    static connect(options: net.NetConnectOpts, auth: { appid: number; secret: string; hostname: string }) {
         const socket = net.createConnection(options);
 
-        return new WebSocket(socket);
+        return new WebSocket(socket, auth);
     }
 }
