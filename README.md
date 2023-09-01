@@ -45,7 +45,7 @@ npm install @gaoding/valve [--save]
 - `performance.limit`-`Optional, type:Object`, 自适应限流的上限配置
 - `performance.limit.cpu`-`Optional, type:Number`, cpu 上限，取值 0-1, 默认 1,
 - `performance.limit.memory`-`Optional, type:String`, 内存上限，支持单位：`B`, `KB`, `MB`, `GB`，默认 '1GB',
-- `performance.recoveryThreshold`-`Optional, type:Number`, 低于性能限制次数，当低于该次数，将关闭限流，默认 1
+- `performance.recoveryThreshold`-`Optional, type:Number`, 低于性能限制次数，当超过该次数，将关闭限流，默认 1
 - `performance.recovery`-`Optional, type:Object`, 自适应限流的下限配置
 - `performance.recovery.cpu`-`Optional, type:Number`, cpu 下限，取值 0-1, 默认 0,
 - `performance.recovery.memory`-`Optional, type:String`, 内存下限，支持单位：`B`, `KB`, `MB`, `GB`，默认 '0GB',
