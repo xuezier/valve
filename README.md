@@ -26,6 +26,12 @@ npm install @gaoding/valve [--save]
 - `rule.api.rule.limit` - `Required, type:Number`, 窗口时间内请求上限
 - `rule.server` - `Optional, type:Object`, 服务限流规则
 - `rule.server.limit` - `Required, type:Number`, 窗口时间内服务请求上限
+- `rule.ip` - `Optional, type:Object`, IP 限流规则
+- `rule.ip.enable` - `Optional, type:Boolean`, 是否开启 IP 限流，默认 false
+- `rule.ip.limit` - `Required, type:Number`, 窗口时间内 IP 请求上限
+- `rule.ip.storage` - `Optional, type: String | RedisOptions`, IP 限流存储方式，默认内存存储 'memory', if use redis,please see ioredis configuration
+- `rule.ip.whiteList` - `Optional, type:Array<String>`, IP 白名单, 优先级高于黑名单，白名单内的 IP 不经过限流
+- `rule.ip.blackList` - `Optional, type:Array<String>`, IP 黑名单, 黑名单内的 IP 强制限流
 - `interval` - `Optional, type:Number`, 窗口时间，单位秒，默认 60 秒
 - `message` - `Optional, type:String`, 限流时响应内容，不配置则响应默认内容
 - `statusCode` - `Optional, type:Number`, 限流时响应的 HTTP 状态码，默认 429
