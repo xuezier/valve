@@ -103,6 +103,7 @@ const options = {
 ```
 
 ## limit in request
+通常情况下不需要认为操作，如果想要在代码中手动去触发限流，可参考：
 
 ```ts
 import { Valve } from '@gaoding/ergate';
