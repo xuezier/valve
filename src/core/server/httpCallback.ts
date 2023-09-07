@@ -4,10 +4,11 @@ import { Injector } from './Injector';
 
 export function httpCallback(callback: http.RequestListener) {
     return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-        const rate = Injector.rate;
-        if(rate.config.enable === false)
+        const valve = Injector.valve;
+        if(valve.config.enable === false)
             return callback(req, res);
 
+        const rate = valve.rateLimitingController;
         Object.defineProperty(req, rate.config.requestPropertyName, {
             value: new Patcher(rate, req, res),
             enumerable: false,
