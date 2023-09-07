@@ -10,14 +10,11 @@ import { Injector } from './Injector';
  */
 export function httpCallback(callback: http.RequestListener) {
     return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-        const rate = Injector.rate; // 获取速率限制配置
-
-        // 如果速率限制功能被禁用，直接调用原始回调函数
-        if (rate.config.enable === false) {
+        const valve = Injector.valve;
+        if(valve.config.enable === false)
             return callback(req, res);
-        }
 
-        // 在请求对象中添加一个不可枚举的属性，用于存储 Patcher 实例
+        const rate = valve.rateLimitingController;
         Object.defineProperty(req, rate.config.requestPropertyName, {
             value: new Patcher(rate, req, res), // 创建 Patcher 实例
             enumerable: false,

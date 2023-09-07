@@ -57,6 +57,7 @@ export class Valve extends Trigger<EValve> {
 
     constructor(options: ValveOptions) {
         super();
+        Injector.valve = this;
 
         const { enable = true, rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false, filters = [], performance } = options;
         this._logger = new Logger(console, debug);
