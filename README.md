@@ -62,20 +62,20 @@ const options = {
     rule:{
         server: {
             limit: 300,
-        }
-    },
-    api: [
-        {
-            method: 'GET',
-            path: '/test1',
-            rule: { limit: 100 }
         },
-        {
-            method: 'GET',
-            path: '/test2/:id',
-            rule: { limit: 150 }
-        }
-    ],
+        api: [
+            {
+                method: 'GET',
+                path: '/test1',
+                rule: { limit: 100 }
+            },
+            {
+                method: 'GET',
+                path: '/test2/:id',
+                rule: { limit: 150 }
+            }
+        ],
+    },
     interval: 10,
     message: 'Request sent too fast, please fill it out later',
     statusCode: 429,
