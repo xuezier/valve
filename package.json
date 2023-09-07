@@ -1,6 +1,6 @@
 {
     "name": "@gaoding/valve",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Node.js http rate limiting plugin",
     "main": "dist/index.js",
     "scripts": {
