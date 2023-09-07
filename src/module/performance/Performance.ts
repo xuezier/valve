@@ -55,6 +55,10 @@ export class PerformanceCollector extends Module {
         return usage;
     }
 
+    handleCollect() {
+        this.transfer.send
+    }
+
     collect(interval: number) {
         this.interval = setInterval(() => {
             const cpu = this._getCPUUsage();
