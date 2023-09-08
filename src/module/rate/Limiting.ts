@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
+import * as url from 'url';
 
 import { ERateLimitingController } from "../../core/trigger/event/ERateLimitingController";
 import { Trigger } from "../../core/trigger/function/Trigger";
@@ -73,7 +74,9 @@ export class RateLimitingController extends Module {
      */
     async isLimitingRequest(request: IncomingMessage) {
         // 获取请求对应的API规则
-        const APIRule = this.config.rule.api.getRule(request.url as string, request.method as TMethod);
+        const path = new url.URL(request.url!).pathname;
+        console.log(path)
+        const APIRule = this.config.rule.api.getRule(path, request.method as TMethod);
         // 增加总请求计数
         const requests = this.counter.addRequest();
         // 增加API请求计数，如果没有对应的API规则，则APIRequests为0
