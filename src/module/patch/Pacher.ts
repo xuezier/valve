@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
+import { URL } from 'url';
 
 import { Config } from "../../config/Config";
 import { RateLimitingController } from "../rate";
@@ -36,7 +37,7 @@ export class Patcher {
      get count() {
         return {
             total: this[PropertyCounter].count,
-            api: this[PropertyCounter].getAPICounter(this[PropertyConfig].rule.api.getRule(this.request.url as string, this.request.method as TMethod))?.count || 0,
+            api: this[PropertyCounter].getAPICounter(this[PropertyConfig].rule.api.getRule(new URL(this.request.url!, `http://${this.request.headers.host!}`).pathname, this.request.method as TMethod))?.count || 0,
         };
     }
 
