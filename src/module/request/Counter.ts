@@ -56,6 +56,10 @@ export class RequestCounter extends Module {
         return this._APICounter;
     }
 
+    get logger() {
+        return this.valve.logger;
+    }
+
     constructor(private valve: Valve, parent?: RequestCounter) {
         super();
 
@@ -128,7 +132,6 @@ export class RequestCounter extends Module {
         if(!this.parent)
             return this.lastReset = now || Date.now();
 
-        console.log('reset')
         return this.lastReset = this.parent.lastReset;
     }
 }
