@@ -74,7 +74,7 @@ export class RateLimitingController extends Module {
      */
     async isLimitingRequest(request: IncomingMessage) {
         // 获取请求对应的API规则
-        const path = new url.URL(request.url!).pathname;
+        const path = new url.URL(request.url!, `http://${request.headers.host!}`).pathname;
         console.log(path)
         const APIRule = this.config.rule.api.getRule(path, request.method as TMethod);
         // 增加总请求计数
