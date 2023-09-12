@@ -19,6 +19,11 @@ export class RequestCounter extends Module {
         return this._lastReset;
     }
 
+    private _parent: RequestCounter;
+    get parent() {
+        return this._parent;
+    }
+
     // 设置上次计数重置的时间戳
     private set lastReset(lastReset: number) {
         this._lastReset = lastReset;
@@ -51,8 +56,17 @@ export class RequestCounter extends Module {
         return this._APICounter;
     }
 
-    constructor(private valve: Valve) {
+    get logger() {
+        return this.valve.logger;
+    }
+
+    constructor(private valve: Valve, parent?: RequestCounter) {
         super();
+
+        if(parent) {
+            this._parent = parent;
+            this.lastReset = this.parent.lastReset;
+        }
 
         // 注册触发器的'reset'事件，当触发该事件时执行reset方法
         this.trigger.on('reset', () => this.reset());
@@ -103,7 +117,7 @@ export class RequestCounter extends Module {
             return 0;
 
         if(!this.APICounter.has(api))
-            this.APICounter.set(api, new RequestCounter(this.valve));
+            this.APICounter.set(api, new RequestCounter(this.valve, this));
 
         return (<RequestCounter>this.APICounter.get(api)).addRequest();
     }
@@ -115,6 +129,9 @@ export class RequestCounter extends Module {
     reset(now?: number) {
         // 将计数器重置为0，并更新上次计数重置的时间戳
         this.count = 0;
-        this.lastReset = now || Date.now();
+        if(!this.parent)
+            return this.lastReset = now || Date.now();
+
+        return this.lastReset = this.parent.lastReset;
     }
 }
