@@ -103,8 +103,6 @@ export class IPRuleConfig {
     async isLimiting(ip?: string) {
         if(!ip) return true;
 
-        if (ip === '127.0.0.1') return true;
-
         if (this.isWhite(ip)) return false;
 
         if (this.isBlock(ip)) return true;
