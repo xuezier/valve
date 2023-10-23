@@ -52,7 +52,7 @@ npm install @gaoding/valve [--save]
 - `debug`-`Optional, type:Boolean`, 是否输出调试日志，默认 false
 
 ```ts
-type Filter = (request: http.IncomingMessage) => boolean;
+type Filter = (request: http.IncomingMessage, response: http.ServerResponse) => boolean;
 ```
 
 Example:
@@ -81,7 +81,7 @@ const options = {
     statusCode: 429,
     isSendRetry: false,
     filters: [
-        (request) => {
+        (request, response) => {
             return request.headers['x-user-id'] == 1;
         }
     ],
