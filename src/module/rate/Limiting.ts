@@ -72,7 +72,7 @@ export class RateLimitingController extends Module {
      * @param request - 请求对象
      * @returns 返回一个布尔值，表示请求是否被限流
      */
-    async isLimitingRequest(request: IncomingMessage) {
+    async isLimitingRequest(request: IncomingMessage, response: ServerResponse) {
         // 获取请求对应的API规则
         const path = new url.URL(request.url!, `http://${request.headers.host!}`).pathname;
         const APIRule = this.config.rule.api.getRule(path, request.method as TMethod);
@@ -82,7 +82,7 @@ export class RateLimitingController extends Module {
         const APIRequests = APIRule ? this.counter.addAPIRequest(APIRule) : 0;
 
         // 过滤器判断，如果通过所有过滤器，则不被限流
-        const isFilterPass = this.filter(request);
+        const isFilterPass = this.filter(request, response);
         if(isFilterPass)
             return false;
 
@@ -115,9 +115,9 @@ export class RateLimitingController extends Module {
     }
 
     // 执行过滤器判断
-    private filter(request: IncomingMessage) {
+    private filter(request: IncomingMessage, response: ServerResponse) {
         for(const filter of this.filters) {
-            const isPass = filter(request);
+            const isPass = filter(request, response);
 
             if(isPass)
                 return isPass;

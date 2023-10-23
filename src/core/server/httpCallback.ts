@@ -16,7 +16,7 @@ export function httpCallback(callback: http.RequestListener) {
             writable: false,
         });
 
-        const isLimitedRequest = await rate.isLimitingRequest(req);
+        const isLimitedRequest = await rate.isLimitingRequest(req, res);
         if(isLimitedRequest)
             return rate.responseLimited(res);
 
