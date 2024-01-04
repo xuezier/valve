@@ -1,3 +1,4 @@
+import { Logger } from "../../util/Logger";
 import { Storage } from "./storage/Storage";
 import { TStorage } from "./type/TStorage";
 
@@ -18,6 +19,8 @@ export class IPRuleConfig {
     private list: Map<string, IP_TYPE> = new Map();
 
     enbale = false;
+
+    logger: Logger;
 
     /**
      * 构造函数，初始化 IP 规则配置。
@@ -40,14 +43,17 @@ export class IPRuleConfig {
         whiteList?: string[];
         blackList?: string[];
         enable?: boolean;
+
+        logger: Logger;
     }) {
         if (!options) return;
 
-        const { storage, interval, limit, whiteList, blackList, enable } = options;
+        const { storage, interval, limit, whiteList, blackList, enable, logger } = options;
 
         this.storage = new Storage({ storage, interval });
         this.limit = ~~limit;
         this.enbale = !!enable;
+        this.logger = logger;
         this.setWhite(whiteList || []);
         this.setBlock(blackList || []);
     }
@@ -108,6 +114,7 @@ export class IPRuleConfig {
         if (this.isBlock(ip)) return true;
 
         const count = await this.storage.incr(ip);
+        this.logger.debug(`got ip request count: ${ip}, ${count} `);
 
         return count > this.limit;
     }

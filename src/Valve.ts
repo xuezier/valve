@@ -80,7 +80,7 @@ export class Valve extends Trigger<EValve> {
                 this.config.rule.server.limit = server.limit;
 
             if(ip) {
-                this.config.rule.ip.setOptions({ ...ip, interval: this.config.interval });
+                this.config.rule.ip.setOptions({ ...ip, interval: this.config.interval, logger: this.logger, });
             }
         }
 
