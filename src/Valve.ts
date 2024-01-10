@@ -62,7 +62,7 @@ export class Valve extends Trigger<EValve> {
         const { enable = true, rule, interval, message, statusCode, isSendRetry, requestPropertyName, logger, debug = false, filters = [], performance } = options;
         this._logger = new Logger(console, debug);
         if(logger)
-            this.logger.logger = logger;
+            this.logger.logger = new Logger(logger, debug);
 
         this.rateLimitingController.logger = this.logger;
 
