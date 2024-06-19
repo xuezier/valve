@@ -4,6 +4,7 @@ import { EPerformanceCollector } from "../../core/trigger/event/EPerformanceColl
 import { getCPUUsage } from "./cpu/cpu";
 import { TUsage } from "./type/Usage";
 import { Module } from "../base/Module";
+import { Valve } from "../../Valve";
 
 export class PerformanceCollector extends Module {
     private _startTime = hrtime();
@@ -73,8 +74,8 @@ export class PerformanceCollector extends Module {
         }, interval);
     }
 
-    constructor() {
-        super();
+    constructor(valve: Valve) {
+        super(valve);
 
         this.on('restart', this.reCollect.bind(this));
         this.once('start', this.reCollect.bind(this));

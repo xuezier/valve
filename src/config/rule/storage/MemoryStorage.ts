@@ -7,6 +7,11 @@ export class MemoryStorage extends Trigger<EStorage> {
     private interval: number;
     private timer: NodeJS.Timer;
 
+    private _lastReset = Date.now();
+    get lastReset() {
+        return this._lastReset;
+    }
+
     restore() {
         this.store = new Map();
     }

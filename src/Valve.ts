@@ -43,7 +43,7 @@ export class Valve extends Trigger<EValve> {
         return this._rateLimitingController;
     }
 
-    private _performanceCollector = new PerformanceCollector();
+    private _performanceCollector = new PerformanceCollector(this);
     get performanceCollector() {
         return this._performanceCollector;
     }
