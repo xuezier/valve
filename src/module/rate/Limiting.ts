@@ -51,7 +51,7 @@ export class RateLimitingController extends Module {
 
     // 构造函数
     constructor(valve: Valve) {
-        super();
+        super(valve);
 
         // 获取请求计数器实例
         this._counter = valve.counter;

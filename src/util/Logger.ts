@@ -20,7 +20,7 @@ export class Logger {
 
     private _isDebug = false;
 
-    constructor(logger, debug = false) {
+    constructor(logger = console, debug = false) {
         if(logger) {
             this.logger = logger;
         }

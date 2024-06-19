@@ -60,8 +60,8 @@ export class RequestCounter extends Module {
         return this.valve.logger;
     }
 
-    constructor(private valve: Valve, parent?: RequestCounter) {
-        super();
+    constructor(valve: Valve, parent?: RequestCounter) {
+        super(valve);
 
         if(parent) {
             this._parent = parent;
@@ -127,6 +127,8 @@ export class RequestCounter extends Module {
      * @param now - 可选参数，指定重置的时间戳，如果不传则使用当前时间戳
      */
     reset(now?: number) {
+        const count = this.count;
+        this.logger.info(`[rate-count] reset count: ${count}`);
         // 将计数器重置为0，并更新上次计数重置的时间戳
         this.count = 0;
         if(!this.parent)
