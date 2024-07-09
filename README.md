@@ -106,7 +106,7 @@ const options = {
 通常情况下不需要人为操作，如果想要在代码中手动去触发限流，可参考：
 
 ```ts
-import { Valve } from '@gaoding/ergate';
+import { Valve } from 'rate-valve';
 import * as http from 'http';
 
 // Initialization configuration needs to be done before the http server starts
