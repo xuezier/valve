@@ -4,7 +4,7 @@ Node.js HTTP rate limiting plugin. Based on native http module, Frameless !!!
 # Installation
 
 ```bash
-npm install @gaoding/valve [--save]
+npm install rate-valve [--save]
 ```
 
 # Usage
